@@ -11,9 +11,13 @@ import (
 )
 
 var newCmd = &cobra.Command{
-	Use: "new",
+	Use:   "new",
+	Short: "create new article",
+	Long:  "create new article",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if err := createNewFile(); err != nil {
+		section := viper.GetString(sectionKey)
+		content := viper.GetString(contentKey)
+		if err := createNewFile(section, content); err != nil {
 			return err
 		}
 		return nil
@@ -25,11 +29,16 @@ const (
 	contentKey = "directory.content"
 )
 
-func createNewFile() error {
+func init() {
+	rootCmd.AddCommand(newCmd)
+	newCmd.Flags().StringP("section", "s", "", "section is a directory in which new articles will be placed, under content")
+	viper.BindPFlag(sectionKey, newCmd.Flags().Lookup("section"))
+}
+
+func createNewFile(section, content string) error {
 	prompt := model.NewPrompt()
 
 	baseFilename, category := prompt.Input()
-	section := viper.GetString(sectionKey)
 	filename := fmt.Sprintf("%s/%s.md", section, baseFilename)
 
 	out, err := exec.Command("hugo", "new", filename).CombinedOutput()
@@ -38,8 +47,7 @@ func createNewFile() error {
 	}
 	fmt.Println(string(out))
 
-	contentDir := viper.GetString(contentKey)
-	absFilepath, err := filepath.Abs(fmt.Sprintf("./%s/%s", contentDir, filename))
+	absFilepath, err := filepath.Abs(fmt.Sprintf("./%s/%s", content, filename))
 	if err != nil {
 		return fmt.Errorf("failed to get absolute file path: %v", err)
 	}

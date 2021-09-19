@@ -7,10 +7,13 @@ import (
 
 	"github.com/icedpenguin0504/hugo-helper/model"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var checkCmd = &cobra.Command{
-	Use: "check",
+	Use:   "check",
+	Short: "Check articles",
+	Long:  "Check articles before publishing",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if err := check(); err != nil {
 			return err
@@ -19,14 +22,15 @@ var checkCmd = &cobra.Command{
 	},
 }
 
-const (
-	contentDir = "content"
-)
+func init() {
+	rootCmd.AddCommand(checkCmd)
+}
 
 func check() error {
 	// 全記事ファイル取得
 	var filenames []string
-	err := filepath.Walk(contentDir, func(path string, info os.FileInfo, err error) error {
+	content := viper.GetString(contentKey)
+	err := filepath.Walk(content, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
