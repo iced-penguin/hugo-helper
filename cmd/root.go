@@ -27,7 +27,7 @@ func Execute() {
 }
 
 func initConfig() {
-	viper.SetConfigName("hugo-helper-config")
+	viper.SetConfigName("hugo-helper")
 	viper.SetConfigType("yml")
 	viper.AddConfigPath(".")
 	if err := viper.ReadInConfig(); err != nil {
