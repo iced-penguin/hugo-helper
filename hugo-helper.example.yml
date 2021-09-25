@@ -1,0 +1,9 @@
+directory:
+  # Articles will be placed in content/section by default
+  content: content
+  section: posts
+taxonomy:
+  # You can use these categories when you create new articles
+  categories:
+    - Programming
+    - Books

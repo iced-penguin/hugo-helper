@@ -12,14 +12,20 @@ go get github.com/icedpenguin0504/hugo-helper
 
 ### Step 1: Prepare config file
 
-Create `hugo-helper-config.yml` in your blog directory.
+Create `hugo-helper.yml` in your blog directory.
 
 Example:
 
 ```
 directory:
+  # Articles will be placed in content/section by default
   content: content
   section: posts
+taxonomy:
+  # You can use these categories when you create new articles
+  categories:
+    - Programming
+    - Books
 ```
 
 ### Step 2: Add new content file
@@ -31,7 +37,7 @@ cd path/to/your/blog
 hugo-helper new
 ```
 
-This command creates the file interactively. The file will be placed in the directory specified in config file. (`content/section/`.) You can also use `section` flag to specify the section.
+This command creates the file interactively. The file will be placed in the directory specified in config file. (`content/section/`.) You can also use `section` flag to specify the section. For details, run `hugo-helper new -h`.
 
 ### Step 3: Write article
 
