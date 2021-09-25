@@ -42,17 +42,3 @@ This command creates the file interactively. The file will be placed in the dire
 ### Step 3: Write article
 
 Write whatever you like in the file you created in step 2.
-
-## Command details
-
-```
-$ hugo-hekper new -h
-create new article
-
-Usage:
-  hugo-helper new [flags]
-
-Flags:
-  -h, --help             help for new
-  -s, --section string   section is a directory in which new articles will be placed, under content
-```
