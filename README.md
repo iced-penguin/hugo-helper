@@ -5,7 +5,7 @@ hugo-helper helps you build Hugo-generated blog.
 ## Install
 
 ```
-go get github.com/icedpenguin0504/hugo-helper
+go get　-u github.com/icedpenguin0504/hugo-helper
 ```
 
 ## How to use
