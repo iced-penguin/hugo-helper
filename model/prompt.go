@@ -2,35 +2,39 @@ package model
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 )
 
-var categories = map[string]string{
-	"1": "Programming",
-	"2": "DB",
-	"3": "PC",
+type Prompt struct {
+	Categories []string
 }
 
-type Prompt struct{}
-
-func NewPrompt() Prompt {
-	return Prompt{}
+func NewPrompt(categories []string) Prompt {
+	return Prompt{
+		Categories: categories,
+	}
 }
 
 func (p Prompt) Input() (filename, category string) {
-	filename = inputFilename()
-	category = inputCategory()
+	filename = p.inputFilename()
+	category = p.inputCategory()
 	return
 }
 
-func inputFilename() string {
+func (p Prompt) inputFilename() string {
 	return inputEach("Enter file name (without extension)")
 }
 
-func inputCategory() string {
-	key := inputEach("Choose category (1: Programming, 2: DB, 3: PC)")
-	category, ok := categories[key]
+func (p Prompt) inputCategory() string {
+	categoriesMap := make(map[string]string)
+	for i, c := range p.Categories {
+		categoriesMap[strconv.Itoa(i+1)] = c
+	}
+	key := inputEach(getMsgCategory(p.Categories))
+	category, ok := categoriesMap[key]
 	if !ok {
-		return inputCategory()
+		return p.inputCategory()
 	}
 	return category
 }
@@ -40,4 +44,12 @@ func inputEach(msg string) (in string) {
 	fmt.Print(">>> ")
 	fmt.Scan(&in)
 	return
+}
+
+func getMsgCategory(categories []string) string {
+	var s []string
+	for i, c := range categories {
+		s = append(s, fmt.Sprintf("%d: %s", i+1, c))
+	}
+	return fmt.Sprintf("Choose category (%s)", strings.Join(s, ", "))
 }

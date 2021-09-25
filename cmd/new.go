@@ -17,7 +17,8 @@ var newCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		section := viper.GetString(sectionKey)
 		content := viper.GetString(contentKey)
-		if err := createNewFile(section, content); err != nil {
+		categories := viper.GetStringSlice(categoriesKey)
+		if err := createNewFile(section, content, categories); err != nil {
 			return err
 		}
 		return nil
@@ -25,8 +26,9 @@ var newCmd = &cobra.Command{
 }
 
 const (
-	sectionKey = "directory.section"
-	contentKey = "directory.content"
+	sectionKey    = "directory.section"
+	contentKey    = "directory.content"
+	categoriesKey = "taxonomy.categories"
 )
 
 func init() {
@@ -35,8 +37,8 @@ func init() {
 	viper.BindPFlag(sectionKey, newCmd.Flags().Lookup("section"))
 }
 
-func createNewFile(section, content string) error {
-	prompt := model.NewPrompt()
+func createNewFile(section, content string, categories []string) error {
+	prompt := model.NewPrompt(categories)
 
 	baseFilename, category := prompt.Input()
 	filename := fmt.Sprintf("%s/%s.md", section, baseFilename)
